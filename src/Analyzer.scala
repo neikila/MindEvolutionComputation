@@ -12,7 +12,7 @@ class Analyzer(val size: Int, val taskCreation: (Int) => Task) extends AnalyzerU
   private case class Result(optimum: Double, xs: List[Double], fCalculated: Int, iterationNum: Int)
 
   private val resultsTupled = (
-    for { i <- (0 until testAmount).toParArray } yield {
+    for { i <- (0 until testAmount) } yield {
       if (i % 25 == 0) println(s"size = $size, i = $i")
       val task1: Task = task()
       Result(task1.optimum, task1.xs, task1.f.amount, task1.iterationNum)
@@ -26,9 +26,9 @@ class Analyzer(val size: Int, val taskCreation: (Int) => Task) extends AnalyzerU
   private val optimum: Double = task().realOptimum
   private val optimumXs: List[Double] = task().realOptimumXs
 
-  val percentage = resultsTupled.map { v => math.abs(v.optimum - optimum) }.count(_ < accuracyResult)
+  val percentage = resultsTupled.map { v => math.abs(v.optimum - optimum) }.count(_ < accuracyResult).toDouble / resultsTupled.size
   val funcCalcultaedSqDeviation = resultsTupled.map { _.fCalculated.toDouble }.squareDeviation  // 8) среднее число испытаний
-  val funcCalcultaedTime = resultsTupled.map { _.fCalculated.toDouble }.average  // 7) среднее число испытаний
+  val funcCalculatedTime = resultsTupled.map { _.fCalculated.toDouble }.average  // 7) среднее число испытаний
   val iterationAverage: Double = resultsTupled.map { _.iterationNum.toDouble }.average  // 6) среднее число итераций
   val averageXsEuclidDeviation: Double = resultXs.map(v => (v - optimumXs).euclidLen).average // 5) среднее значение лучшего Х
   val best: Double = results.max                               // 4) лучшее значение функции

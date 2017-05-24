@@ -13,29 +13,37 @@ object Main extends AnalyzerUtils {
     Nil
 
   def main(args: Array[String]): Unit = {
-    println(List(1.0, 3.0, 5.0).average)
-
-    //    println(new RosenbrokeTask(size))
-    //    new Analyzer(() => { new RastriginTask(math.pow(2, 2).toInt) })
-//    println(new RosenbrokeTask(32, true).optimum)
-
-//    createAnalyze()
+    createAnalyze()
   }
 
   def createAnalyze() {
     val analyzersPar = for {
-      i <- (1 to 5).toParArray
+      i <- (1 to 3).toParArray
       t <- tasks.take(1)
     } yield new Analyzer(math.pow(2, i).toInt, t)
 
     val analyzers = analyzersPar.toList
-    println("Error")
-    analyzers.map(_.error).map("%,f ".format(_)).foreach(println)
 
-    println("sqDeviation")
-    analyzers.map(_.sqDeviation).map("%,f ".format(_)).foreach(println)
+    def printParam(f: Analyzer => Double): Unit = {
+      analyzers.map(f).map("%,.3f; ".format(_)).foreach(print)
+    }
 
-    println("average")
-    analyzers.map(_.averageBest).map("%,f ".format(_)).foreach(println)
+    def printWithMessage(str: String, f: Analyzer => Double): Unit = {
+      print(str + "; ")
+      printParam(f)
+      println()
+    }
+
+    List[(String, Analyzer => Double)](
+      "|X|" -> (_.size.toDouble),
+      "f*" -> (_.best),
+      "f**" -> (_.averageBest),
+      "x*" -> (_.bestXsEuclidDeviation),
+      "x**" -> (_.averageXsEuclidDeviation),
+      "t av" -> (_.iterationAverage),
+      "m" -> (_.funcCalculatedTime),
+      "teta(f*)" -> (_.sqDeviation),
+      "teta(m)" -> (_.funcCalcultaedSqDeviation)
+    ).foreach { case (name, func) => printWithMessage(name, func) }
   }
 }
