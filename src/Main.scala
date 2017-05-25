@@ -5,9 +5,11 @@ import tasks._
   */
 object Main extends AnalyzerUtils {
 
-  val tasks: List[(Int) => Task] = ((s: Int) => new SphereTask(s)) ::
-    ((s: Int) => new RastriginTask(s)) ::
-    ((s: Int) => new RosenbrokeTask(s)) ::
+  val algoSettings = AlgoSettings(0.01, 12, 20)
+
+  val tasks: List[(Int) => Task] = ((s: Int) => new SphereTask(s, algoSettings)) ::
+    ((s: Int) => new RastriginTask(s, algoSettings)) ::
+    ((s: Int) => new RosenbrokeTask(s, algoSettings)) ::
     Nil
 
   def main(args: Array[String]): Unit = {
@@ -22,7 +24,11 @@ object Main extends AnalyzerUtils {
     } yield new Analyzer(math.pow(2, i).toInt, t)
 
     val analyzers = analyzersPar.toList
+    println(analyzers.head.task().name)
+    printAllInfo(analyzers)
+  }
 
+  def printAllInfo(analyzers: List[Analyzer]): Unit = {
     def printParam(f: Analyzer => Double): Unit = {
       analyzers.map(f).map("%,.3f; ".format(_)).foreach(print)
     }
@@ -33,7 +39,6 @@ object Main extends AnalyzerUtils {
       println()
     }
 
-    println(analyzers.head.task().name)
     List[(String, Analyzer => Double)](
       "|X|" -> (_.size.toDouble),
       "f*" -> (_.best),

@@ -1,18 +1,22 @@
 package algo
 
+import tasks.AlgoSettings
+
 /**
   * Created by k.neyman on 29.03.2017.
   */
 class MecAlgo(val f: SearchAlgo.Function,
               val isLogged: Boolean = false)
-             (implicit val distributions: List[Double], val bounds: List[(Double, Double)]) {
+             (implicit val distributions: List[Double],
+              val bounds: List[(Double, Double)],
+              val algoSettings: AlgoSettings) {
 
   implicit val func: SearchAlgo.Function = f
 
   assert(distributions.size == bounds.size)
 
-  private val groupSize = 20
-  private val groupAmount = 12
+  private val groupSize = algoSettings.groupSize
+  private val groupAmount = algoSettings.groupAmount
 
   private val accuracy = 1e-6
   private val repeatTimeLimit = 30
