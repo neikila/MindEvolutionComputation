@@ -5,9 +5,9 @@ import algo.{Group, Individual, MecAlgo, SearchAlgo}
 /**
   * Created by k.neyman on 27.04.2017.
   */
-abstract class Task (val size: Int, val isLogged: Boolean = false) {
+abstract class Task (val name: String, val size: Int, val isLogged: Boolean = false) {
   implicit val f: SearchAlgo.Function
-  protected implicit val bounds: List[(Double, Double)] = List.tabulate(size) { _ => (-5.0, 5.0) }
+  protected implicit val bounds: List[(Double, Double)] = List.tabulate(size) { _ => (-1.0, 1.0) }
   protected implicit val distributions: List[Double] = List.tabulate(size) { _ => 0.01 }
   val realOptimum: Double
   val realOptimumXs: List[Double]

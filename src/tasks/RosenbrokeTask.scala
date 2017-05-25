@@ -5,7 +5,7 @@ import algo.SearchAlgo
 /**
   * Created by k.neyman on 27.04.2017.
   */
-class RosenbrokeTask(size: Int, isLogged: Boolean = false) extends Task(size, isLogged) {
+class RosenbrokeTask(size: Int, isLogged: Boolean = false) extends Task("Rozenbroke", size, isLogged) {
   private val f0 = 390
 
   override val realOptimum: Double = -1 * f0

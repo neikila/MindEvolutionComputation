@@ -5,21 +5,20 @@ import tasks._
   */
 object Main extends AnalyzerUtils {
 
-  private val size = 32
-
   val tasks: List[(Int) => Task] = ((s: Int) => new SphereTask(s)) ::
     ((s: Int) => new RastriginTask(s)) ::
     ((s: Int) => new RosenbrokeTask(s)) ::
     Nil
 
   def main(args: Array[String]): Unit = {
+//    new SphereTask(32, true).execute()
     createAnalyze()
   }
 
   def createAnalyze() {
     val analyzersPar = for {
-      i <- (1 to 3).toParArray
-      t <- tasks.take(1)
+      i <- (3 until 4).toParArray
+      t <- tasks.slice(2, 3)
     } yield new Analyzer(math.pow(2, i).toInt, t)
 
     val analyzers = analyzersPar.toList
@@ -34,6 +33,7 @@ object Main extends AnalyzerUtils {
       println()
     }
 
+    println(analyzers.head.task().name)
     List[(String, Analyzer => Double)](
       "|X|" -> (_.size.toDouble),
       "f*" -> (_.best),
@@ -43,7 +43,8 @@ object Main extends AnalyzerUtils {
       "t av" -> (_.iterationAverage),
       "m" -> (_.funcCalculatedTime),
       "teta(f*)" -> (_.sqDeviation),
-      "teta(m)" -> (_.funcCalcultaedSqDeviation)
+      "teta(m)" -> (_.funcCalcultaedSqDeviation),
+      "P" -> (_.percentage)
     ).foreach { case (name, func) => printWithMessage(name, func) }
   }
 }

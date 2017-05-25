@@ -11,10 +11,10 @@ class MecAlgo(val f: SearchAlgo.Function,
 
   assert(distributions.size == bounds.size)
 
-  private val groupSize = 10
+  private val groupSize = 20
   private val groupAmount = 12
 
-  private val accuracy = 1e-4
+  private val accuracy = 1e-6
   private val repeatTimeLimit = 30
 
   def solve(): Group = {
@@ -32,7 +32,7 @@ class MecAlgo(val f: SearchAlgo.Function,
     val maxPrev = winners.head.leader.count
     val (newWin, newLose) = dissimilate(winners.map(_.recreate), losers.map(_.recreate))
     val result: Double = newWin.head.leader.count
-    if (isLogged) println("%,f ".format(math.abs(result)))
+    if (isLogged) println("%,f ".format(result))
     if (math.abs(maxPrev - result) > accuracy) {
       repeatTime = 0
     } else {

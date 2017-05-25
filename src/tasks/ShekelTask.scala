@@ -6,7 +6,7 @@ import generators.{ChooseDoubleGen, DoubleGen}
 /**
   * Created by k.neyman on 27.04.2017.
   */
-class ShekelTask(size: Int) extends Task(size) {
+class ShekelTask(size: Int) extends Task("Shekel", size) {
   private val f0s: List[Double] = 0.3 :: 0.9 :: 0.7 :: 0.8 :: 0.1 :: 0.01 :: 0.65 :: Nil
   private val X: List[List[Double]] = List.tabulate(f0s.size) { _ =>
     implicit val gen = new DoubleGen

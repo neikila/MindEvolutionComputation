@@ -5,7 +5,7 @@ import algo.SearchAlgo
 /**
   * Created by k.neyman on 27.04.2017.
   */
-class SphereTask(size: Int, isLogged: Boolean = false) extends Task(size, isLogged) {
+class SphereTask(size: Int, isLogged: Boolean = false) extends Task("Sphere", size, isLogged) {
   private val b0 = 10
 
   override val realOptimum: Double = -b0

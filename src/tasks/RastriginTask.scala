@@ -5,7 +5,7 @@ import algo.SearchAlgo
 /**
   * Created by k.neyman on 27.04.2017.
   */
-class RastriginTask(size: Int, isLogged: Boolean = false) extends Task(size, isLogged) {
+class RastriginTask(size: Int, isLogged: Boolean = false) extends Task("Rastrigin", size, isLogged) {
   private val f0 = -330
 
   override val realOptimum: Double = -1 * f0

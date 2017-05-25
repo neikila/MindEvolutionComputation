@@ -1,3 +1,5 @@
+import java.util.concurrent.atomic.AtomicInteger
+
 import tasks.Task
 
 /**
@@ -11,9 +13,12 @@ class Analyzer(val size: Int, val taskCreation: (Int) => Task) extends AnalyzerU
 
   private case class Result(optimum: Double, xs: List[Double], fCalculated: Int, iterationNum: Int)
 
+  private val counter: AtomicInteger = new AtomicInteger(0)
+
   private val resultsTupled = (
-    for { i <- (0 until testAmount) } yield {
-      if (i % 25 == 0) println(s"size = $size, i = $i")
+    for { i <- (0 until testAmount).toParArray } yield {
+      val local = counter.getAndIncrement()
+      if (local % 25 == 0) println(s"size = $size, i = $local")
       val task1: Task = task()
       Result(task1.optimum, task1.xs, task1.f.amount, task1.iterationNum)
     }).toStream
@@ -31,13 +36,10 @@ class Analyzer(val size: Int, val taskCreation: (Int) => Task) extends AnalyzerU
   val funcCalculatedTime = resultsTupled.map { _.fCalculated.toDouble }.average  // 7) среднее число испытаний
   val iterationAverage: Double = resultsTupled.map { _.iterationNum.toDouble }.average  // 6) среднее число итераций
   val averageXsEuclidDeviation: Double = resultXs.map(v => (v - optimumXs).euclidLen).average // 5) среднее значение лучшего Х
-  val best: Double = results.max                               // 4) лучшее значение функции
+  val best: Double = math.abs(results.max - optimum)                               // 4) лучшее значение функции
   val bestXsEuclidDeviation: Double = resultXs.map(v => (v - optimumXs).euclidLen).min // 3) значение лучшего Х
   val sqDeviation: Double = results.squareDeviation   // 2) Среднеквадратичное
-  val averageBest: Double = results.average           // 1) среднее лучшее значение
-
-  val averageError: Double = math.abs(averageBest - optimum)
-  val error: Double = math.abs(best - optimum)
+  val averageBest: Double = math.abs(results.average - optimum)           // 1) среднее лучшее значение
 
   override def toString: String = {
     s"max = $best\n" +
